@@ -56,7 +56,7 @@ class CenterConnector:
             except Exception:
                 self.server.logger.exception("定时任务执行出错")
 
-    def clean_up(self):
+    def clean_up(self, server: mcdr.PluginServerInterface):
         self.heartbeat_stop_event.set()
         self.heartbeat_worker.join(timeout=5)
         # kill
