@@ -46,6 +46,9 @@ class CenterConnector:
             try:
                 player_list = get_player_list()
                 if player_list:
+                    self.server.logger.info(
+                        f"Heartbeat for {len(player_list)} players: {', '.join(player_list)}"
+                    )
                     for player in player_list:
                         self.server.logger.info(f"Heartbeat for {player}")
                         self.action.heartbeat(player)
