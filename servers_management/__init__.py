@@ -59,6 +59,8 @@ class CenterConnector:
     def clean_up(self):
         self.heartbeat_stop_event.set()
         self.heartbeat_worker.join(timeout=5)
+        # kill
+        self.action.ws.close()
 
 
 def on_load(server: mcdr.PluginServerInterface, old):
