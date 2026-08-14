@@ -1,8 +1,12 @@
+import os
 import threading
 
 import mcdreforged as mcdr
 
 from online_player_api import get_player_list
+
+from .action import Action
+from .config import load_or_init_config
 
 
 class CenterConnector:
@@ -10,6 +14,14 @@ class CenterConnector:
 
     def __init__(self, server: mcdr.PluginServerInterface):
         self.server = server
+
+        config = load_or_init_config(
+            os.path.join(server.get_data_folder(), "config.json")
+        )
+
+        self.action = Action(config["server"], config["port"])
+        self.id = config["id"]
+        self.nickname = config["nickname"]
 
         self.heartbeat_stop_event = threading.Event()
         self.heartbeat_worker: threading.Thread = threading.Thread(
@@ -26,12 +38,18 @@ class CenterConnector:
         self, server: mcdr.PluginServerInterface, player: str, info: mcdr.Info
     ):
         self.server.logger.info(f"Instantly Heartbeat for {player}")
+        self.action.heartbeat(player)
 
     def heartbeat(self):
         # wait 返回 True 说明被 set 了(要退出),返回 False 说明是超时(该干活了)
         while not self.heartbeat_stop_event.wait(self.INTERVAL):
             try:
-                self.server.logger.info(f"Heartbeat for {', '.join(get_player_list())}")
+                player_list = get_player_list()
+                if player_list:
+                    for player in player_list:
+                        self.server.logger.info(f"Heartbeat for {player}")
+                        self.action.heartbeat(player)
+
             except Exception:
                 self.server.logger.exception("定时任务执行出错")
 
