@@ -48,9 +48,6 @@ class CenterConnector:
             try:
                 player_list = get_player_list()
                 if player_list:
-                    self.server.logger.info(
-                        f"Heartbeat for {len(player_list)} players: {', '.join(player_list)}"
-                    )
                     for player in player_list:
                         if check_whitelist(self.server, player):
                             # self.server.logger.info(f"Heartbeat for {player}")
