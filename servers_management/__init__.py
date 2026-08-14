@@ -7,6 +7,7 @@ from online_player_api import get_player_list
 
 from .action import Action
 from .config import load_or_init_config
+from .utils import check_whitelist
 
 
 class CenterConnector:
@@ -37,8 +38,9 @@ class CenterConnector:
     def on_player_joined(
         self, server: mcdr.PluginServerInterface, player: str, info: mcdr.Info
     ):
-        self.server.logger.info(f"Instantly Heartbeat for {player}")
-        self.action.heartbeat(player)
+        if check_whitelist(self.server, player):
+            self.server.logger.info(f"Instantly Heartbeat for {player}")
+            self.action.heartbeat(player)
 
     def heartbeat(self):
         # wait 返回 True 说明被 set 了(要退出),返回 False 说明是超时(该干活了)
@@ -50,8 +52,9 @@ class CenterConnector:
                         f"Heartbeat for {len(player_list)} players: {', '.join(player_list)}"
                     )
                     for player in player_list:
-                        self.server.logger.info(f"Heartbeat for {player}")
-                        self.action.heartbeat(player)
+                        if check_whitelist(self.server, player):
+                            # self.server.logger.info(f"Heartbeat for {player}")
+                            self.action.heartbeat(player)
 
             except Exception:
                 self.server.logger.exception("定时任务执行出错")
