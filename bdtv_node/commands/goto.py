@@ -1,3 +1,5 @@
+from typing import cast
+
 import mcdreforged as mcdr
 from mcdreforged.api.decorator import new_thread
 
@@ -43,27 +45,46 @@ def list_servers(src: mcdr.CommandSource, ctx: mcdr.CommandContext):
 
 @new_thread("GotoSwitch")
 def switch_server(src: mcdr.CommandSource, ctx: mcdr.CommandContext):
-    # if src.is_player:
-    #     src = cast(mcdr.PlayerCommandSource, src)
+    if not src.is_player:
+        src.reply("Only players can use this command.")
+        return
 
-    #     player_name = src.player
-    #     target_server = ctx["server_name"]
+    src = cast(mcdr.PlayerCommandSource, src)
 
-    #     if target_server not in SERVERS:
-    #         src.reply(f"并没有找到名为 {target_server} 的服务器。")
-    #         return
+    player_name = src.player
+    target_server_slug = ctx["server_slug"]
 
-    #     command = f"/transfer {SERVERS[target_server]['address']} {SERVERS[target_server]['port']} {player_name}"
+    if target_server_slug == state.server_data["slug"]:
+        src.reply("你已经在这个服务器里了")
+        return
 
-    #     src.get_server().execute(command)
-    #     src.get_server().say(
-    #         mcdr.RTextList(
-    #             f"§e{player_name}前往了{SERVERS[target_server]['nickname']}§r"
-    #         )
-    #     )
-    # else:
-    #     src.reply("Only players can use this command.")
-    pass
+    servers = try_get_servers(src.get_server())
+
+    if servers is None:
+        src.reply("获取在线服务器失败")
+        return
+
+    for server in servers:
+        if server["slug"] != target_server_slug:
+            continue
+
+        command = f"/transfer {server['address']} {server['port']} {player_name}"
+        src.get_server().execute(command)
+        src.get_server().say(
+            mcdr.RTextList(f"§e{player_name}前往了{server['nickname']}§r")
+        )
+        break
+    else:
+        t = [
+            mcdr.RText("没有ID为"),
+            mcdr.RText(f"{target_server_slug}", color=mcdr.RColor.aqua),
+            mcdr.RText("的服务器在线，试试使用"),
+            mcdr.RText("!!goto", color=mcdr.RColor.yellow)
+            .h("点击执行")
+            .c(mcdr.RClickAction.suggest_command, "!!goto"),
+            mcdr.RText("命令查看在线服务器清单"),
+        ]
+        src.reply(mcdr.RTextList(*t))
 
 
 def register_command(server: mcdr.PluginServerInterface):
