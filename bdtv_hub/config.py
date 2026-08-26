@@ -10,8 +10,9 @@ CONFIG_FILE = "config.json"
 DEFAULT_CONFIG: Config = {
     "server_nickname": "我的服务器",
     "server_slug": "my-server",
-    "server_public_address": "127.0.0.1",
-    "server_port": 25565,
+    "mc_public_address": "127.0.0.1",
+    "mc_port": 25565,
+    "bdtv_hub_base": "http://127.0.0.1:7497"
 }
 
 

@@ -1,4 +1,5 @@
 import mcdreforged as mcdr
+import requests
 from mcdreforged.api.decorator import new_thread
 
 from online_player_api import get_player_list
@@ -28,8 +29,15 @@ def start_heartbeat(server: mcdr.PluginServerInterface, delay: float = 5.0):
             if player.name in players
         ]
 
-        # TODO: 请求心跳
-        logger.info(online_real_player)
+        json_data = {
+            "players": online_real_player,
+            "server": state.server_data,
+        }
+
+        try:
+            requests.post(f"{state.hub_url_base}/beat", json=json_data, timeout=(3, 3))
+        except requests.RequestException as _:
+            pass
 
         state.stop_heartbeat.wait(delay)
     logger.info("Bye!")

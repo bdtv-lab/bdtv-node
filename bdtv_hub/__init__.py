@@ -14,11 +14,12 @@ def on_load(server: mcdr.PluginServerInterface, prev_module):
     logger.info("配置文件已加载")
 
     state.server_data = {
-        "address": config["server_public_address"],
-        "port": config["server_port"],
+        "address": config["mc_public_address"],
+        "port": config["mc_port"],
         "nickname": config["server_nickname"],
         "slug": config["server_slug"],
     }
+    state.hub_url_base = config["bdtv_hub_base"]
 
     state.stop_heartbeat = threading.Event()
 
