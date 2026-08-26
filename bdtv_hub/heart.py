@@ -8,7 +8,7 @@ from . import state
 from .types import Player
 
 
-@new_thread("bdtv-hub Heartbeat")
+@new_thread("Heartbeat")
 def start_heartbeat(server: mcdr.PluginServerInterface, delay: float = 5.0):
     logger = server.logger
 
