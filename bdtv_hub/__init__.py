@@ -5,6 +5,15 @@ import mcdreforged as mcdr
 from . import state
 from .config import load_or_init_config
 from .heart import start_heartbeat
+from .utils import handle_player_join, pure_players
+
+
+def on_player_joined(server: mcdr.PluginServerInterface, player: str, info: mcdr.Info):
+    real_player = pure_players([player])
+
+    # 非 0 则为单一玩家名称存在于白名单中
+    if len(real_player) != 0:
+        handle_player_join(server, real_player[0])  # type: ignore[operator]
 
 
 def on_load(server: mcdr.PluginServerInterface, prev_module):

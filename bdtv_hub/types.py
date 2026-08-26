@@ -2,6 +2,10 @@ from typing import TypedDict
 
 
 class Config(TypedDict):
+    """
+    配置文件
+    """
+
     # MC 服务器可被公开访问的地址
     mc_public_address: str
     # MC 服务器端口
