@@ -1,5 +1,5 @@
 {
-    "id": "bdtv_hub",
+    "id": "bdtv_node",
     "version": "0.1.0",
     "name": "BDTV Hub",
     "description": "为 BDTV 服务器群提供统一的管理和控制功能",

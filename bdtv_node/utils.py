@@ -73,4 +73,5 @@ def handle_player_join(server: mcdr.PluginServerInterface, player: Player):
 
     # 尝试给玩家展示 motd
     if motd := try_get_motd(server):
+        server.logger.info(f"为 {player['nickname']} 展示 MOTD")
         server.tell(player["nickname"], motd)
