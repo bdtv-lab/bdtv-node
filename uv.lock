@@ -3,6 +3,21 @@ revision = 3
 requires-python = ">=3.12"
 
 [[package]]
+name = "bdtv-node"
+version = "0.1.0"
+source = { virtual = "." }
+dependencies = [
+    { name = "mcdreforged" },
+    { name = "requests" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "mcdreforged", specifier = ">=2.15.7" },
+    { name = "requests", specifier = ">=2.34.2" },
+]
+
+[[package]]
 name = "certifi"
 version = "2026.7.22"
 source = { registry = "https://pypi.org/simple" }
@@ -334,21 +349,6 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/b9/17/4e01a602693b572149f92c983c1f25bd608df02c3f5cf50fd1f94e124a59/ruamel_yaml_clib-0.2.15-cp314-cp314-musllinux_1_2_x86_64.whl", hash = "sha256:542d77b72786a35563f97069b9379ce762944e67055bea293480f7734b2c7e5e", size = 765882, upload-time = "2025-11-16T16:13:49.526Z" },
     { url = "https://files.pythonhosted.org/packages/9f/17/7999399081d39ebb79e807314de6b611e1d1374458924eb2a489c01fc5ad/ruamel_yaml_clib-0.2.15-cp314-cp314-win32.whl", hash = "sha256:424ead8cef3939d690c4b5c85ef5b52155a231ff8b252961b6516ed7cf05f6aa", size = 102567, upload-time = "2025-11-16T16:13:50.78Z" },
     { url = "https://files.pythonhosted.org/packages/d2/67/be582a7370fdc9e6846c5be4888a530dcadd055eef5b932e0e85c33c7d73/ruamel_yaml_clib-0.2.15-cp314-cp314-win_amd64.whl", hash = "sha256:ac9b8d5fa4bb7fd2917ab5027f60d4234345fd366fe39aa711d5dca090aa1467", size = 122847, upload-time = "2025-11-16T16:13:51.807Z" },
-]
-
-[[package]]
-name = "servers-management-client"
-version = "0.1.0"
-source = { virtual = "." }
-dependencies = [
-    { name = "mcdreforged" },
-    { name = "requests" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "mcdreforged", specifier = ">=2.15.7" },
-    { name = "requests", specifier = ">=2.34.2" },
 ]
 
 [[package]]

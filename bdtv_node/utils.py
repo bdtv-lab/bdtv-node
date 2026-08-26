@@ -5,7 +5,7 @@ from mcdreforged.api.decorator import new_thread
 from whitelist_api import get_whitelist
 
 from . import state
-from .types import Player
+from .types import Player, Server
 
 
 def pure_players(players_name: list[str]) -> list[Player]:
@@ -45,7 +45,7 @@ def post_heartbeat_anyway(players: list[Player]):
         pass
 
 
-def try_get_motd(server: mcdr.PluginServerInterface) -> mcdr.RTextBase | None:
+def try_get_motd(server: mcdr.ServerInterface) -> mcdr.RTextBase | None:
     """
     尝试获取 MOTD 的 JSON 格式文本
 
@@ -60,6 +60,23 @@ def try_get_motd(server: mcdr.PluginServerInterface) -> mcdr.RTextBase | None:
         return None
     except TypeError as e:
         server.logger.error(f"无法解析 JSON 格式文本: {e}")
+        return None
+
+
+def try_get_servers(server: mcdr.ServerInterface) -> list[Server] | None:
+    """
+    尝试获取在线的服务器列表
+
+    解析失败与请求失败均返回 None
+    """
+
+    try:
+        raw = requests.get(f"{state.hub_url_base}/servers", timeout=(3, 3))
+        return raw.json()
+    except requests.RequestException as _:
+        return None
+    except TypeError as e:
+        server.logger.error(f"解析 JSON 出现错误: {e}")
         return None
 
 

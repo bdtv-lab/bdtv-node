@@ -3,6 +3,7 @@ import threading
 import mcdreforged as mcdr
 
 from . import state
+from .commands import register_command
 from .config import load_or_init_config
 from .heart import start_heartbeat
 from .utils import handle_player_join, pure_players
@@ -29,6 +30,8 @@ def on_load(server: mcdr.PluginServerInterface, prev_module):
         "slug": config["server_slug"],
     }
     state.hub_url_base = config["bdtv_hub_base"]
+
+    register_command(server)
 
     state.stop_heartbeat = threading.Event()
 
