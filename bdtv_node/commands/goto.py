@@ -9,14 +9,20 @@ from ..utils import try_get_servers
 
 @new_thread("GotoList")
 def list_servers(src: mcdr.CommandSource, ctx: mcdr.CommandContext):
+    """
+    展示当前 BDTV hub 中记录的在线服务器列表
+    """
+
+    # 尝试获取在线服务器
     servers = try_get_servers(src.get_server())
 
     if servers is None:
-        src.reply("获取在线服务器失败")
+        src.reply(mcdr.RText("获取在线服务器失败", color=mcdr.RColor.red))
         return
 
     t = [mcdr.RText(f"现在有{len(servers)}个服务器在线"), mcdr.RText("\n")]
 
+    # 遍历服务器构造消息列表
     for index, server in enumerate(servers):
         if index > 0:
             t.append(mcdr.RText("\n"))
@@ -45,35 +51,48 @@ def list_servers(src: mcdr.CommandSource, ctx: mcdr.CommandContext):
 
 @new_thread("GotoSwitch")
 def switch_server(src: mcdr.CommandSource, ctx: mcdr.CommandContext):
+    """
+    将玩家转移至另一服务器
+    """
+
+    # 服务器无法被转移，所以限定为玩家
     if not src.is_player:
         src.reply("Only players can use this command.")
         return
 
+    # 现在必定是玩家类型了，强转
     src = cast(mcdr.PlayerCommandSource, src)
 
     player_name = src.player
     target_server_slug = ctx["server_slug"]
 
+    # 如果对象是本服务器，不执行转移，也不请求
     if target_server_slug == state.server_data["slug"]:
         src.reply("你已经在这个服务器里了")
         return
 
+    # 尝试获取在线服务器
     servers = try_get_servers(src.get_server())
 
     if servers is None:
-        src.reply("获取在线服务器失败")
+        src.reply(mcdr.RText("获取在线服务器失败", color=mcdr.RColor.red))
         return
 
+    # 遍历服务器列表，尝试找到匹配服务器的地址并转移
+    # 注意这里不会特判目标是不是本服务器
     for server in servers:
+        # 跳过非目标服务器
         if server["slug"] != target_server_slug:
             continue
 
+        # 构造转移命令并执行
         command = f"/transfer {server['address']} {server['port']} {player_name}"
         src.get_server().execute(command)
         src.get_server().say(
             mcdr.RTextList(f"§e{player_name}前往了{server['nickname']}§r")
         )
         break
+    # 如果没有匹配的服务器
     else:
         t = [
             mcdr.RText("没有ID为"),
@@ -88,6 +107,10 @@ def switch_server(src: mcdr.CommandSource, ctx: mcdr.CommandContext):
 
 
 def register_command(server: mcdr.PluginServerInterface):
+    """
+    注册 goto 系列命令
+    """
+
     builder = mcdr.SimpleCommandBuilder()
 
     server.register_help_message("!!goto", "用于切换服务器的命令")
