@@ -10,3 +10,4 @@ wheels/
 .venv
 
 online_player_api/
+whitelist_api/
