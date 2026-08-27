@@ -27,22 +27,24 @@ def list_servers(src: mcdr.CommandSource, ctx: mcdr.CommandContext):
         if index > 0:
             t.append(mcdr.RText("\n"))
 
-        s = [
-            mcdr.RText(f"{server['nickname']}", color=mcdr.RColor.green).h(
-                f"{server['slug']}"
-            ),
-            mcdr.RText(" ", color=mcdr.RColor.green),
-        ]
+        s = []
         if server["slug"] == state.server_data["slug"]:
-            s.append(
-                mcdr.RText("(当前)", color=mcdr.RColor.yellow).h("你在这个服务器里")
-            )
+            s.append(mcdr.RText("当前 ", color=mcdr.RColor.gray).h("你在这个服务器里"))
         else:
             s.append(
-                mcdr.RText(">前往", color=mcdr.RColor.yellow)
+                mcdr.RText("前往 ", color=mcdr.RColor.yellow)
                 .h("点击前往")
                 .c(mcdr.RClickAction.suggest_command, f"!!goto {server['slug']}")
             )
+
+        s.extend(
+            [
+                mcdr.RText(f"{server['nickname']}", color=mcdr.RColor.green).h(
+                    f"{server['slug']}"
+                ),
+                mcdr.RText(" ", color=mcdr.RColor.green),
+            ]
+        )
 
         t.extend(s)
 
