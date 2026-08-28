@@ -63,7 +63,7 @@ def try_get_motd(server: mcdr.ServerInterface) -> mcdr.RTextBase | None:
         return None
 
 
-def try_get_servers(server: mcdr.ServerInterface) -> list[Server] | None:
+def try_get_servers(server: mcdr.ServerInterface) -> dict[str, Server] | None:
     """
     尝试获取在线的服务器列表
 

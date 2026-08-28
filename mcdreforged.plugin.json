@@ -4,7 +4,7 @@
     "name": "BDTV Hub",
     "description": "为 BDTV 服务器群提供统一的管理和控制功能",
     "author": "peter2500zz",
-    "link": "https://gitea.mygo.plus/bdtv/server-management-client",
+    "link": "https://github.com/bdtv-lab/bdtv-node",
     "dependencies": {
         "mcdreforged": ">=2.0.0-alpha.1",
         "online_player_api": ">=1.2.0",

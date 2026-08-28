@@ -23,7 +23,7 @@ def list_servers(src: mcdr.CommandSource, ctx: mcdr.CommandContext):
     t = [mcdr.RText(f"现在有{len(servers)}个服务器在线"), mcdr.RText("\n")]
 
     # 遍历服务器构造消息列表
-    for index, server in enumerate(servers):
+    for index, server in enumerate(servers.values()):
         if index > 0:
             t.append(mcdr.RText("\n"))
 
@@ -82,7 +82,7 @@ def switch_server(src: mcdr.CommandSource, ctx: mcdr.CommandContext):
 
     # 遍历服务器列表，尝试找到匹配服务器的地址并转移
     # 注意这里不会特判目标是不是本服务器
-    for server in servers:
+    for server in servers.values():
         # 跳过非目标服务器
         if server["slug"] != target_server_slug:
             continue
