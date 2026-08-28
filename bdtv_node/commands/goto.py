@@ -1,9 +1,11 @@
+from collections.abc import Callable
 from typing import cast
 
 import mcdreforged as mcdr
 from mcdreforged.api.decorator import new_thread
 
 from .. import state
+from ..types import Server
 from ..utils import try_get_servers
 
 
@@ -22,8 +24,12 @@ def list_servers(src: mcdr.CommandSource, ctx: mcdr.CommandContext):
 
     t = [mcdr.RText(f"现在有{len(servers)}个服务器在线"), mcdr.RText("\n")]
 
+    # 对服务器列表进行按 slug 排序
+    servers_value = list(servers.values())
+    sort_by_slug: Callable[[Server], str] = lambda s: s["slug"]
+    servers_value.sort(key=sort_by_slug)
     # 遍历服务器构造消息列表
-    for index, server in enumerate(servers.values()):
+    for index, server in enumerate(servers_value):
         if index > 0:
             t.append(mcdr.RText("\n"))
 
