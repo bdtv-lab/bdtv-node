@@ -7,4 +7,5 @@ requires-python = ">=3.12"
 dependencies = [
     "mcdreforged>=2.15.7",
     "requests>=2.34.2",
+    "websocket-client>=1.9.2",
 ]

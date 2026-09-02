@@ -1,6 +1,9 @@
+import json
+
 import mcdreforged as mcdr
 import requests
 from mcdreforged.api.decorator import new_thread
+from websocket import WebSocketException
 
 from whitelist_api import get_whitelist
 
@@ -34,14 +37,17 @@ def post_heartbeat_anyway(players: list[Player]):
     """
 
     json_data = {
-        "players": players,
-        "server": state.server_data,
+        "action": "heartbeat",
+        "data": {
+            "players": players,
+            "server": state.server_data,
+        },
     }
 
     # 立刻 Beat 一次
     try:
-        requests.post(f"{state.hub_url_base}/beat", json=json_data, timeout=(3, 3))
-    except requests.RequestException as _:
+        state.ws.send(json.dumps(json_data))
+    except WebSocketException as _:
         pass
 
 
