@@ -1,7 +1,7 @@
 {
     "id": "bdtv_node",
     "version": "0.1.0",
-    "name": "BDTV Hub",
+    "name": "BDTV Node",
     "description": "为 BDTV 服务器群提供统一的管理和控制功能",
     "author": "peter2500zz",
     "link": "https://github.com/bdtv-lab/bdtv_node",
